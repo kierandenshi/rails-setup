@@ -1,5 +1,5 @@
-# rails-notepad
-Useful notes for new Rails apps.
+# rails-setup
+Setup notes for new Rails apps.
 
 ### Use UUID indexes
 
@@ -54,3 +54,6 @@ class CreateActiveStorageTables < ActiveRecord::Migration[5.2]
   end
 end
 ```
+
+### Sidekiq
+Clear all queued jobs in the Rails console with `Sidekiq.redis(&:flushdb)` (best not do this in production)
