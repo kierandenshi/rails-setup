@@ -1,7 +1,7 @@
 # rails-setup
 Setup notes for new Rails apps.
 
-### Use UUID indexes
+## Use UUID indexes
 
 Create a migration like this:
 ```
@@ -12,7 +12,7 @@ class EnablePgcryptoExtension < ActiveRecord::Migration[6.1]
 end
 ```
 
-#### ActiveStorage
+### ActiveStorage
 The migration created by `rails active_storage:install` will need to be edited to use UUID. 
 
 *Remember to add `type: :uuid` to all `belongs_to` and `references` definitions.
@@ -55,5 +55,18 @@ class CreateActiveStorageTables < ActiveRecord::Migration[5.2]
 end
 ```
 
-### Sidekiq
+## Old migrations
+Delete old migrations then add a new migration with the same TIMESTAMP as the last migration you deleted, with the following content:
+```
+class OldMigrations < ActiveRecord::Migration[5.1]
+  REQUIRED_VERSION = TIMESTAMP
+  def up
+    if ActiveRecord::Migrator.current_version < REQUIRED_VERSION
+      raise StandardError, "`rails db:schema:load` must be run prior to `rails db:migrate`"
+    end
+  end
+end
+```
+
+## Sidekiq
 Clear all queued jobs in the Rails console with `Sidekiq.redis(&:flushdb)` (best not do this in production)
